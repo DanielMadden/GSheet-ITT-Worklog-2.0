@@ -1,11 +1,14 @@
 function updateSummary() {
-  console.log('it worked mofo')
+  // Get Summary Sheet
   var SummarySheet = SpreadsheetApp.getActive().getSheetByName("📈 Summary");
 
+  // Get all other sheets
   var sheets = SpreadsheetApp.getActive().getSheets();
 
+  // Setup the monthStats object
   let monthStats = {};
 
+  // Set up the months, accessible by index + 1
   let months = [
     "January",
     "February",

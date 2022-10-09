@@ -1,4 +1,4 @@
 async function master() {
-  await updateActiveSheet();
+  await updateWeekSheet();
   updateSummary();
 }
