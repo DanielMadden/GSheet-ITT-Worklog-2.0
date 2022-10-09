@@ -10,7 +10,6 @@ let startingStatsCanvasRow = 6;
 let startingStatsRow = 7;
 
 function updateActiveSheet() {
-  console.log('bitch')
   if (sheetName.includes("Summary") || sheetName == "Template") return;
   let stats = calculateStats();
   let currentRow = startingStatsRow;
