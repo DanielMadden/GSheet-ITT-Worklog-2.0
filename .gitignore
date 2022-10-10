@@ -1,3 +1,4 @@
 /.clasp.json
 *clasp
 *.clasp
+/node_modules/

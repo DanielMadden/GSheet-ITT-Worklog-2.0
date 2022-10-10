@@ -1,4 +1,4 @@
-export default interface StatType {
+export default interface EntryType {
   name: string;
   time: number;
 }

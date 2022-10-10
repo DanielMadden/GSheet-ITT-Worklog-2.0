@@ -1,0 +1,18 @@
+/models/data/dayData.ts
+/models/data/stat.ts
+/models/data/weekData.ts
+/models/weekSheet.ts
+node_modules/
+node_modules
+/node_modules
+
+**/**
+
+# except the extensions…
+!appsscript.json
+!**/*.gs
+!**/*.js
+!**/*.ts
+!**/*.html
+
+**/node_modules/**
