@@ -75,6 +75,7 @@ function calculateStats() {
     stats[day].name = day;
     stats[day].data = getDayData(columnEnd);
   });
+  console.log(stats);
   return stats;
 }
 
