@@ -1,0 +1,52 @@
+{
+  "Monday": {
+    "name": "Monday",
+    "data": {
+      "Team": 0.16666666666666666,
+      "DaaS": 0.25,
+      "Week Prep": 0.5833333333333334,
+      "SKD": 5.733333333333333,
+      "Culture": 1.6666666666666667
+    }
+  },
+  "Tuesday": {
+    "name": "Tuesday",
+    "data": { "SKD": 7.25, "Team": 0.03333333333333333 }
+  },
+  "Wednesday": {
+    "name": "Wednesday",
+    "data": {
+      "SKD": 5.433333333333334,
+      "ITT": 0.16666666666666666,
+      "BCW": 3.3666666666666667,
+      "Team": 0.16666666666666666
+    }
+  },
+  "Thursday": {
+    "name": "Thursday",
+    "data": {
+      "Prep": 0.25,
+      "Catching Up": 0.25,
+      "SKD": 9.41666666666667,
+      "BCW": 0.8,
+      "Team": 0.3333333333333333,
+      "SCO": 0.08333333333333333,
+      "SE": 0.08333333333333333
+    }
+  },
+  "Friday": {
+    "name": "Friday",
+    "data": {
+      "SKD": 7.166666666666667,
+      "Catching Up": 0.16666666666666663,
+      "Team": 0.5,
+      "SE": 0.08333333333333333,
+      "Feedback Friday": 1.5,
+      "Culture": 0.16666666666666663,
+      "Lunch": 0.5833333333333334,
+      "Accountability": 0.75
+    }
+  },
+  "Saturday": { "name": "Saturday", "data": {} },
+  "Sunday": { "name": "Sunday", "data": {} }
+}
