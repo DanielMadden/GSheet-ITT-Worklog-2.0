@@ -20,8 +20,9 @@ let rows = {
 };
 
 let columns = {
-  summaryStart: 1,
-  summaryEnd: 3,
+  summaryEntryName: 1,
+  summaryEntryTime: 2,
+  summaryEntryPercentage: 3,
   daysStart: 4,
 };
 
@@ -30,14 +31,14 @@ let currentRow = rows.entries;
 
 let weekData: WeekDataType;
 
-function weekMaster() {
+async function weekMaster() {
   if (
     sheetName.includes("Summary") ||
     sheetName.includes("Template") ||
     sheetName.includes("Formatting")
   )
     return;
-  getWeekData();
+  weekData = await getWeekData();
   writeWeekData();
 }
 
@@ -157,5 +158,26 @@ function getWeekData() {
 }
 
 function writeWeekData(): void {
-  // sheet.getRange("A" + rows.summary + ":C100").setValue("");
+  sheet.getRange("A" + rows.summary + ":C100").setValue("");
+
+  currentRow = rows.summary;
+  currentColumn = columns.summaryStart;
+
+  let sortedWeekSummaryEntries: EntryType[] = convertEntrySummaryToSortedArray(
+    weekData.summary
+  );
+
+  function writeWeekSummary() {
+    for (let i = 0; i < sortedWeekSummaryEntries.length; i++) {
+      sheet
+        .getRange(currentRow, columns.summaryEntryName)
+        .setValue(sortedWeekSummaryEntries[i].name);
+      sheet
+        .getRange(currentRow, columns.summaryEntryTime)
+        .setValue(sortedWeekSummaryEntries[i].time);
+      currentRow++;
+    }
+  }
+
+  writeWeekSummary();
 }
