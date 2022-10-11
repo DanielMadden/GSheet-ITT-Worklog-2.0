@@ -9,11 +9,6 @@ import RawEntryDataType from "./models/data/rawEntryData";
 var sheet = SpreadsheetApp.getActive().getSheetByName("✅ 10 || 03 - 07");
 var sheetName = sheet.getName();
 
-let startingColumn = 4;
-// let startingTimeRow = 6;
-// let startingStatsCanvasRow = 6;
-// let startingStatsRow = 6;
-
 let rows = {
   dayName: 2,
   totalHours: 3,
@@ -24,7 +19,7 @@ let rows = {
 
 let columns = {
   summaryStart: 1,
-  summaryEnd: 1,
+  summaryEnd: 3,
   daysStart: 4,
 };
 
@@ -35,13 +30,12 @@ let weekData: WeekDataType;
 
 function weekMaster() {
   getWeekData();
+  writeWeekData();
 }
 
 function getWeekData() {
   let thereIsANextDay = true;
   let dayOfWeek = 1;
-
-  getDayData();
 
   let weekData: WeekDataType = {
     monthId: 1,
@@ -49,6 +43,77 @@ function getWeekData() {
     totalHours: 0,
     daysDataArray: [],
   };
+
+  //   NOTE getDayData
+  function getDayData(): DayDataType {
+    let thereIsANextEntry = true;
+    currentRow = rows.entries;
+
+    let dayData: DayDataType = {
+      day: sheet.getRange(rows.dayName, currentColumn).getValue(),
+      entries: [],
+    };
+
+    // NOTE getEntryData
+    function getEntryData(): EntryType | undefined {
+      // Grab the raw cell data
+      let rawEntryData: RawEntryDataType = getEntryAtRow();
+
+      //   NOTE getRawEntryData
+      function getEntryAtRow(): RawEntryDataType {
+        let name = sheet.getRange(currentRow, currentColumn).getValue();
+        let startTime = sheet
+          .getRange(currentRow, currentColumn + 1)
+          .getValue();
+        let endTime = sheet.getRange(currentRow, currentColumn + 2).getValue();
+
+        return {
+          name: name,
+          startTime: startTime,
+          endTime: endTime,
+        };
+      }
+
+      //   If neither start or end cells are dates, return undefined.
+      if (
+        !(rawEntryData.startTime instanceof Date) ||
+        !(rawEntryData.endTime instanceof Date)
+      )
+        return;
+
+      let startHours = rawEntryData.startTime.getHours() + 1;
+      let startMinutes = rawEntryData.startTime.getMinutes();
+
+      let endHours = rawEntryData.endTime.getHours() + 1;
+      let endMinutes = rawEntryData.endTime.getMinutes();
+
+      let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
+
+      console.log("name: " + rawEntryData.name);
+      console.log("duration: " + duration);
+
+      return {
+        name: rawEntryData.name,
+        time: duration,
+      };
+    }
+
+    while (thereIsANextEntry) {
+      // Run a pre-entry check to see if this is a valid entry
+      let preEntryCheck = getEntryData();
+      if (preEntryCheck !== undefined) {
+        let entry: EntryType = preEntryCheck;
+        dayData.entries.push(entry);
+      }
+      if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
+        thereIsANextEntry = false;
+      currentRow++;
+    }
+
+    console.log(dayData);
+
+    return dayData;
+  }
 
   while (thereIsANextDay) {
     currentColumn = columns.daysStart + 3 * dayOfWeek;
@@ -64,68 +129,6 @@ function getWeekData() {
   return weekData;
 }
 
-function getDayData(): DayDataType {
-  let thereIsANextEntry = true;
-  currentRow = rows.entries;
-
-  let dayData: DayDataType = {
-    day: sheet.getRange(rows.dayName, currentColumn).getValue(),
-    entries: [],
-  };
-
-  while (thereIsANextEntry) {
-    // Run a pre-entry check to see if this is a valid entry
-    let preEntryCheck = getEntryData();
-    if (preEntryCheck !== undefined) {
-      let entry: EntryType = preEntryCheck;
-      dayData.entries.push(entry);
-    }
-    if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
-      thereIsANextEntry = false;
-    currentRow++;
-  }
-
-  console.log(dayData);
-
-  return dayData;
-}
-
-function getEntryData(): EntryType | undefined {
-  // Grab the raw cell data
-  let rawEntryData: RawEntryDataType = getEntryAtRow();
-
-  //   If neither start or end cells are dates, return undefined.
-  if (
-    !(rawEntryData.startTime instanceof Date) ||
-    !(rawEntryData.endTime instanceof Date)
-  )
-    return;
-
-  let startHours = rawEntryData.startTime.getHours() + 1;
-  let startMinutes = rawEntryData.startTime.getMinutes();
-
-  let endHours = rawEntryData.endTime.getHours() + 1;
-  let endMinutes = rawEntryData.endTime.getMinutes();
-
-  let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
-
-  console.log("name: " + rawEntryData.name);
-  console.log("duration: " + duration);
-
-  return {
-    name: rawEntryData.name,
-    time: duration,
-  };
-}
-
-function getEntryAtRow(): RawEntryDataType {
-  let name = sheet.getRange(currentRow, currentColumn).getValue();
-  let startTime = sheet.getRange(currentRow, currentColumn + 1).getValue();
-  let endTime = sheet.getRange(currentRow, currentColumn + 2).getValue();
-
-  return {
-    name: name,
-    startTime: startTime,
-    endTime: endTime,
-  };
+function writeWeekData(): void {
+  sheet.getRange("A" + rows.summary + ":C100").setValue("");
 }
