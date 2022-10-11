@@ -1,4 +1,4 @@
-import Stat from "./stat";
+import EntryType from "./stat";
 
 export default interface DayDataType {
   day:
@@ -11,5 +11,5 @@ export default interface DayDataType {
     | "Sunday";
   monthId?: number;
   dayOfMonthId?: number;
-  data: Stat[];
+  data: EntryType[];
 }
