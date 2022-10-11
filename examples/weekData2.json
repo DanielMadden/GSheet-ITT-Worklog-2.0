@@ -1,0 +1,153 @@
+{
+  "monthId": 10,
+  "dateRange": "03 - 07",
+  "datesOfMonth": [3, 4, 5, 6, 7],
+  "totalHours": 0,
+  "summary": {
+    "Team": 1.2,
+    "DaaS": 0.25,
+    "Week Prep": 0.5833333333333334,
+    "SKD": 34.99999999999999,
+    "Culture": 1.8333333333333335,
+    "ITT": 0.16666666666666666,
+    "BCW": 4.166666666666667,
+    "Prep": 0.25,
+    "Catching Up": 0.41666666666666663,
+    "SCO": 0.08333333333333333,
+    "SE": 0.16666666666666666,
+    "Feedback Friday": 1.5,
+    "Lunch": 0.5833333333333334,
+    "Accountability": 0.75
+  },
+  "daysDataArray": [
+    {
+      "day": "Monday",
+      "summary": {
+        "Team": 0.16666666666666666,
+        "DaaS": 0.25,
+        "Week Prep": 0.5833333333333334,
+        "SKD": 5.733333333333333,
+        "Culture": 1.6666666666666667
+      },
+      "entries": [
+        { "name": "Team", "time": 0.08333333333333333 },
+        { "name": "DaaS", "time": 0.25 },
+        { "name": "Week Prep", "time": 0.5 },
+        { "name": "SKD", "time": 0.08333333333333333 },
+        { "name": "Week Prep", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 1.3333333333333335 },
+        { "name": "SKD", "time": 3.4 },
+        { "name": "Team", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.75 },
+        { "name": "Culture", "time": 1.6666666666666667 },
+        { "name": "SKD", "time": 0.16666666666666666 }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "summary": { "SKD": 7.25, "Team": 0.03333333333333333 },
+      "entries": [
+        { "name": "SKD", "time": 1 },
+        { "name": "SKD", "time": 0.6666666666666666 },
+        { "name": "SKD", "time": 1 },
+        { "name": "SKD", "time": 2.6666666666666665 },
+        { "name": "SKD", "time": 0.6666666666666667 },
+        { "name": "Team", "time": 0.03333333333333333 },
+        { "name": "SKD", "time": 1 },
+        { "name": "SKD", "time": 0.25 }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "summary": {
+        "SKD": 5.433333333333334,
+        "ITT": 0.16666666666666666,
+        "BCW": 3.3666666666666667,
+        "Team": 0.16666666666666666
+      },
+      "entries": [
+        { "name": "SKD", "time": 0.9166666666666666 },
+        { "name": "SKD", "time": 1.1666666666666667 },
+        { "name": "ITT", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.08333333333333333 },
+        { "name": "ITT", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.2 },
+        { "name": "SKD", "time": 0.6666666666666666 },
+        { "name": "BCW", "time": 3.3666666666666667 },
+        { "name": "SKD", "time": 2.4 },
+        { "name": "Team", "time": 0.16666666666666666 }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "summary": {
+        "Prep": 0.25,
+        "Catching Up": 0.25,
+        "SKD": 9.41666666666667,
+        "BCW": 0.8,
+        "Team": 0.3333333333333333,
+        "SCO": 0.08333333333333333,
+        "SE": 0.08333333333333333
+      },
+      "entries": [
+        { "name": "Prep", "time": 0.25 },
+        { "name": "Catching Up", "time": 0.25 },
+        { "name": "SKD", "time": 1.6666666666666667 },
+        { "name": "BCW", "time": 0.8 },
+        { "name": "SKD", "time": 0.5 },
+        { "name": "SKD", "time": 1.75 },
+        { "name": "Team", "time": 0.3333333333333333 },
+        { "name": "SKD", "time": 1.6666666666666667 },
+        { "name": "SKD", "time": 0.5 },
+        { "name": "SKD", "time": 0.6666666666666666 },
+        { "name": "SKD", "time": 0.9166666666666666 },
+        { "name": "SCO", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.33333333333333337 },
+        { "name": "SKD", "time": 0.8333333333333334 },
+        { "name": "SKD", "time": 0.33333333333333337 },
+        { "name": "SKD", "time": 0.25 },
+        { "name": "SE", "time": 0.08333333333333333 }
+      ]
+    },
+    {
+      "day": "Friday",
+      "summary": {
+        "SKD": 7.166666666666667,
+        "Catching Up": 0.16666666666666663,
+        "Team": 0.5,
+        "SE": 0.08333333333333333,
+        "Feedback Friday": 1.5,
+        "Culture": 0.16666666666666663,
+        "Lunch": 0.5833333333333334,
+        "Accountability": 0.75
+      },
+      "entries": [
+        { "name": "SKD", "time": 0.08333333333333333 },
+        { "name": "Catching Up", "time": 0.16666666666666663 },
+        { "name": "Team", "time": 0.08333333333333333 },
+        { "name": "SE", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.3333333333333333 },
+        { "name": "Feedback Friday", "time": 1 },
+        { "name": "SKD", "time": 0.3333333333333333 },
+        { "name": "Feedback Friday", "time": 0.08333333333333333 },
+        { "name": "SKD", "time": 0.33333333333333337 },
+        { "name": "Feedback Friday", "time": 0.4166666666666667 },
+        { "name": "SKD", "time": 0.08333333333333333 },
+        { "name": "Team", "time": 0.08333333333333333 },
+        { "name": "Culture", "time": 0.16666666666666663 },
+        { "name": "SKD", "time": 0.25 },
+        { "name": "Lunch", "time": 0.5833333333333334 },
+        { "name": "SKD", "time": 1.1666666666666665 },
+        { "name": "Team", "time": 0.3333333333333333 },
+        { "name": "Accountability", "time": 0.5833333333333334 },
+        { "name": "SKD", "time": 0.75 },
+        { "name": "SKD", "time": 1.3333333333333333 },
+        { "name": "SKD", "time": 2.3333333333333335 },
+        { "name": "SKD", "time": 0.16666666666666666 },
+        { "name": "Accountability", "time": 0.16666666666666663 }
+      ]
+    },
+    { "day": "Saturday", "summary": {}, "entries": [] },
+    { "day": "Sunday", "summary": {}, "entries": [] }
+  ]
+}

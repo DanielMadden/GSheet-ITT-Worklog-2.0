@@ -1,5 +1,6 @@
 let debugging = true;
 
 function debug(data) {
-  if (debugging) console.log(data);
+  let dataJSON = JSON.stringify(data);
+  if (debugging) console.log(dataJSON);
 }
