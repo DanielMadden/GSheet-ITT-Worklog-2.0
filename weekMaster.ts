@@ -3,6 +3,8 @@ import WeekDataType from "./models/data/weekData";
 import EntryType from "./models/data/stat";
 import { sheets } from "googleapis/build/src/apis/sheets";
 import RawEntryDataType from "./models/data/rawEntryData";
+// import { splitWeekName } from "./splitWeekName";
+import SheetNameSplitData from "./models/data/sheetNameSplitData";
 
 // @ts-ignore
 // var sheet = SpreadsheetApp.getActive().getActiveSheet();
@@ -44,11 +46,12 @@ function getWeekData() {
   let thereIsANextDay = true;
   let dayOfWeek = 1;
 
-  // let weekName = splitWeekName();
+  let sheetNameSplit: SheetNameSplitData = splitWeekName(sheetName);
 
   let weekData: WeekDataType = {
-    monthId: 1,
-    dayRange: "03 - 07",
+    monthId: sheetNameSplit.monthID,
+    dateRange: sheetNameSplit.dateRange,
+    datesOfMonth: sheetNameSplit.dates,
     totalHours: 0,
     summary: {},
     daysDataArray: [],
