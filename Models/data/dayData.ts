@@ -11,5 +11,5 @@ export default interface DayDataType {
     | "Sunday";
   monthId?: number;
   dayOfMonthId?: number;
-  data: EntryType[];
+  entries: EntryType[];
 }
