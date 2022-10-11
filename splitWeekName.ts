@@ -1,6 +1,6 @@
-import SheetNameSplitData from "./models/data/sheetNameSplitData";
+// import SheetNameSplitData from "./models/data/sheetNameSplitData";
 
-function splitWeekName(sheetName): SheetNameSplitData {
+function splitWeekName(sheetName) {
   let sheetNameSplit: string = sheetName.split(" || ");
   let monthId: number = parseInt(sheetNameSplit[0].split(" ")[1]);
   let dateRange: string = sheetNameSplit[1];
