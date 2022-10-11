@@ -1,12 +1,12 @@
-import weekData from "./data/weekData";
+// import weekData from "./data/weekData";
 
-interface WeekSheetType {
-  sheetName: string;
-  data: weekData;
+// interface WeekSheetType {
+//   sheetName: string;
+//   data: weekData;
 
-  getData(): void;
-  writeData(): void;
-}
+//   getData(): void;
+//   writeData(): void;
+// }
 
 // export class WeekSheet implements WeekSheetType {
 //   sheetName: string;
