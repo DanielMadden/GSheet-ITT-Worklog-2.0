@@ -29,6 +29,12 @@ let currentRow = rows.entries;
 let weekData: WeekDataType;
 
 function weekMaster() {
+  if (
+    sheetName.includes("Summary") ||
+    sheetName.includes("Template") ||
+    sheetName.includes("Formatting")
+  )
+    return;
   getWeekData();
   writeWeekData();
 }
@@ -37,6 +43,8 @@ function weekMaster() {
 function getWeekData() {
   let thereIsANextDay = true;
   let dayOfWeek = 1;
+
+  // let weekName = splitWeekName();
 
   let weekData: WeekDataType = {
     monthId: 1,
