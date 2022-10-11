@@ -2,6 +2,7 @@ import DayDataType from "./models/data/dayData";
 import WeekDataType from "./models/data/weekData";
 import EntryType from "./models/data/stat";
 import { sheets } from "googleapis/build/src/apis/sheets";
+import RawEntryDataType from "./models/data/rawEntryData";
 
 // @ts-ignore
 // var sheet = SpreadsheetApp.getActive().getActiveSheet();
@@ -73,38 +74,58 @@ function getDayData(): DayDataType {
   };
 
   while (thereIsANextEntry) {
-    let entry: EntryType = getEntryData();
-    dayData.entries.push(entry);
+    // Run a pre-entry check to see if this is a valid entry
+    let preEntryCheck = getEntryData();
+    if (preEntryCheck !== undefined) {
+      let entry: EntryType = preEntryCheck;
+      dayData.entries.push(entry);
+    }
     if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
       thereIsANextEntry = false;
     currentRow++;
   }
 
+  console.log(dayData);
+
   return dayData;
 }
 
-function getEntryData(): EntryType {
-  //   console.log("sheet: " + sheet);
-  //   console.log("sheetName: " + sheetName);
+function getEntryData(): EntryType | undefined {
+  // Grab the raw cell data
+  let rawEntryData: RawEntryDataType = getEntryAtRow();
 
+  //   If neither start or end cells are dates, return undefined.
+  if (
+    !(rawEntryData.startTime instanceof Date) ||
+    !(rawEntryData.endTime instanceof Date)
+  )
+    return;
+
+  let startHours = rawEntryData.startTime.getHours() + 1;
+  let startMinutes = rawEntryData.startTime.getMinutes();
+
+  let endHours = rawEntryData.endTime.getHours() + 1;
+  let endMinutes = rawEntryData.endTime.getMinutes();
+
+  let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
+
+  console.log("name: " + rawEntryData.name);
+  console.log("duration: " + duration);
+
+  return {
+    name: rawEntryData.name,
+    time: duration,
+  };
+}
+
+function getEntryAtRow(): RawEntryDataType {
   let name = sheet.getRange(currentRow, currentColumn).getValue();
   let startTime = sheet.getRange(currentRow, currentColumn + 1).getValue();
   let endTime = sheet.getRange(currentRow, currentColumn + 2).getValue();
 
-  //   console.log("name: " + name);
-  //   console.log("startTime: " + startTime);
-  //   console.log("endTime: " + endTime);
-
-  let startHours = startTime.getHours() + 1;
-  let startMinutes = startTime.getMinutes();
-
-  let endHours = endTime.getHours() + 1;
-  let endMinutes = endTime.getMinutes();
-
-  let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
-
   return {
     name: name,
-    time: duration,
+    startTime: startTime,
+    endTime: endTime,
   };
 }
