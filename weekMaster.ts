@@ -38,14 +38,20 @@ function getDayData() {
   currentRow = startingStatsRow;
   currentColumn = startingColumn;
 
-  let stat: EntryType = getEntryData();
-  console.log(stat);
+  let day: DayDataType = {
+    day: "Friday",
+    entries: [],
+  };
 
-  //   while (thereIsANextEntry) {
+  while (thereIsANextEntry) {
+    let entry: EntryType = getEntryData();
+    day.entries.push(entry);
+    if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
+      thereIsANextEntry = false;
+    currentRow++;
+  }
 
-  //     let stat: EntryType = getEntryData();
-  //     currentRow++;
-  //   }
+  console.log(day);
 }
 
 function getEntryData(): EntryType {
