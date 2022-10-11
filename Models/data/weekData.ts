@@ -5,5 +5,6 @@ export default interface WeekDataType {
   dayRange: string;
   daysOfMonth?: number[];
   totalHours: number;
+  summary: object;
   daysDataArray: DayData[];
 }
