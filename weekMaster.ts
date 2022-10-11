@@ -7,8 +7,8 @@ import RawEntryDataType from "./models/data/rawEntryData";
 import SheetNameSplitData from "./models/data/sheetNameSplitData";
 
 // @ts-ignore
-// var sheet = SpreadsheetApp.getActive().getActiveSheet();
-var sheet = SpreadsheetApp.getActive().getSheetByName("✅ 10 || 03 - 07");
+var sheet = SpreadsheetApp.getActive().getActiveSheet();
+// var sheet = SpreadsheetApp.getActive().getSheetByName("✅ 10 || 03 - 07");
 var sheetName = sheet.getName();
 
 let rows = {
@@ -16,7 +16,7 @@ let rows = {
   totalHours: 3,
   headers: 5,
   entries: 6,
-  summary: 7,
+  summary: 6,
 };
 
 let columns = {
@@ -161,7 +161,6 @@ function writeWeekData(): void {
   sheet.getRange("A" + rows.summary + ":C100").setValue("");
 
   currentRow = rows.summary;
-  currentColumn = columns.summaryStart;
 
   let sortedWeekSummaryEntries: EntryType[] = convertEntrySummaryToSortedArray(
     weekData.summary
