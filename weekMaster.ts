@@ -33,6 +33,7 @@ function weekMaster() {
   writeWeekData();
 }
 
+// ANCHOR getWeekData()
 function getWeekData() {
   let thereIsANextDay = true;
   let dayOfWeek = 1;
@@ -41,25 +42,27 @@ function getWeekData() {
     monthId: 1,
     dayRange: "03 - 07",
     totalHours: 0,
+    summary: {},
     daysDataArray: [],
   };
 
-  //   NOTE getDayData
+  //   ANCHOR getDayData()
   function getDayData(): DayDataType {
     let thereIsANextEntry = true;
     currentRow = rows.entries;
 
     let dayData: DayDataType = {
       day: sheet.getRange(rows.dayName, currentColumn).getValue(),
+      summary: {},
       entries: [],
     };
 
-    // NOTE getEntryData
+    // ANCHOR getEntryData()
     function getEntryData(): EntryType | undefined {
       // Grab the raw cell data
       let rawEntryData: RawEntryDataType = getEntryAtRow();
 
-      //   NOTE getRawEntryData
+      //   ANCHOR getRawEntryData()
       function getEntryAtRow(): RawEntryDataType {
         let name = sheet.getRange(currentRow, currentColumn).getValue();
         let startTime = sheet
@@ -89,8 +92,8 @@ function getWeekData() {
 
       let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
 
-      console.log("name: " + rawEntryData.name);
-      console.log("duration: " + duration);
+      debug("name: " + rawEntryData.name);
+      debug("duration: " + duration);
 
       return {
         name: rawEntryData.name,
@@ -98,37 +101,50 @@ function getWeekData() {
       };
     }
 
+    // ANCHOR addEntryToDaySummary()
+    function addEntryToDaySummary(entry: EntryType): void {
+      if (!dayData.summary[entry.name]) dayData.summary[entry.name] = 0;
+      dayData.summary[entry.name] += entry.time;
+    }
+
+    // ANCHOR addEntryToWeekSummary()
+    function addEntryToWeekSummary(entry: EntryType): void {
+      if (!weekData.summary[entry.name]) weekData.summary[entry.name] = 0;
+      weekData.summary[entry.name] += entry.time;
+    }
+
     while (thereIsANextEntry) {
-      // Run a pre-entry check to see if this is a valid entry
       let preEntryCheck = getEntryData();
       if (preEntryCheck !== undefined) {
         let entry: EntryType = preEntryCheck;
         dayData.entries.push(entry);
+        addEntryToDaySummary(entry);
+        addEntryToWeekSummary(entry);
       }
       if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
         thereIsANextEntry = false;
       currentRow++;
     }
 
-    console.log(dayData);
+    debug(dayData);
 
     return dayData;
   }
 
   while (thereIsANextDay) {
-    currentColumn = columns.daysStart + 3 * dayOfWeek;
     let dayData: DayDataType = getDayData();
     weekData.daysDataArray.push(dayData);
     if (!sheet.getRange(rows.dayName, currentColumn + 3).getValue())
       thereIsANextDay = false;
+    currentColumn = columns.daysStart + 3 * dayOfWeek;
     dayOfWeek++;
   }
 
-  console.log(weekData);
+  debug(weekData);
 
   return weekData;
 }
 
 function writeWeekData(): void {
-  sheet.getRange("A" + rows.summary + ":C100").setValue("");
+  // sheet.getRange("A" + rows.summary + ":C100").setValue("");
 }
