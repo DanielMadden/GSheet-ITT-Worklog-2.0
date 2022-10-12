@@ -131,6 +131,11 @@ function getWeekData() {
       weekData.summary[entry.name] += entry.time;
     }
 
+    // ANCHOR addEntryTimeToWeekTotalHours()
+    function addEntryTimeToWeekTotalHours(entry: EntryType): void {
+      weekData.totalHours += entry.time;
+    }
+
     while (thereIsANextEntry) {
       let preEntryCheck = getEntryData();
       if (preEntryCheck !== undefined) {
@@ -138,6 +143,7 @@ function getWeekData() {
         dayData.entries.push(entry);
         addEntryToDaySummary(entry);
         addEntryToWeekSummary(entry);
+        addEntryTimeToWeekTotalHours(entry);
       }
       if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
         thereIsANextEntry = false;
