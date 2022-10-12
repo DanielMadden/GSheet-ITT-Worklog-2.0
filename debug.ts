@@ -1,4 +1,4 @@
-let debugging = false;
+let debugging = true;
 
 function debug(data) {
   let dataJSON = JSON.stringify(data);

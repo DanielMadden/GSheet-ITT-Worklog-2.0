@@ -43,6 +43,7 @@ async function weekMaster() {
   writeWeekData();
 }
 
+// ANCHOR writeUpdatingStatus()
 function writeUpdatingStatus() {
   sheet.getRange("A" + rows.summary + ":C100").setValue("");
   sheet.getRange("A" + rows.summary).setValue("Updating...");
@@ -169,6 +170,7 @@ function getWeekData() {
   return weekData;
 }
 
+// ANCHOR writeWeekData()
 function writeWeekData(): void {
   sheet.getRange("A" + rows.summary + ":C100").setValue("");
 
@@ -186,6 +188,9 @@ function writeWeekData(): void {
       sheet
         .getRange(currentRow, columns.summaryEntryTime)
         .setValue(sortedWeekSummaryEntries[i].time);
+      sheet
+        .getRange(currentRow, columns.summaryEntryPercentage)
+        .setValue(sortedWeekSummaryEntries[i].time / weekData.totalHours);
       currentRow++;
     }
   }
