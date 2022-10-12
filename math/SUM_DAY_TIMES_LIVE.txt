@@ -1,0 +1,1 @@
+=IF(COUNTBLANK(minuend_range) > COUNTBLANK(subtrahend_range), CONCATENATE(TO_TEXT(MINUS(SUM(minuend_range) + TIMEVALUE(NOW()),SUM(subtrahend_range))), " LIVE ⏱"), MINUS(SUM(minuend_range),SUM(subtrahend_range)))

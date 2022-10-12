@@ -1,0 +1,1 @@
+=MINUS(SUM(column_r),SUM(column_l))
