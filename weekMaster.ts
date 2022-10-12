@@ -38,8 +38,14 @@ async function weekMaster() {
     sheetName.includes("Formatting")
   )
     return;
+  writeUpdatingStatus();
   weekData = await getWeekData();
   writeWeekData();
+}
+
+function writeUpdatingStatus() {
+  sheet.getRange("A" + rows.summary + ":C100").setValue("");
+  sheet.getRange("A" + rows.summary).setValue("Updating...");
 }
 
 // ANCHOR getWeekData()
