@@ -104,6 +104,7 @@ function getWeekData() {
         return;
 
       let startHours = rawEntryData.startTime.getHours() + 1;
+      if (startHours == 24) startHours = 0; // LITERALLY just for the zero time.
       let startMinutes = rawEntryData.startTime.getMinutes();
 
       let endHours = rawEntryData.endTime.getHours() + 1;
