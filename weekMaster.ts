@@ -5,6 +5,7 @@ import { sheets } from "googleapis/build/src/apis/sheets";
 import RawEntryDataType from "./models/data/rawEntryData";
 // import { splitWeekName } from "./splitWeekName";
 import SheetNameSplitData from "./models/data/sheetNameSplitData";
+import LiveEntryType from "./models/data/liveEntryType";
 
 // @ts-ignore
 var sheet = SpreadsheetApp.getActive().getActiveSheet();
@@ -78,7 +79,7 @@ function getWeekData() {
     };
 
     // ANCHOR getEntryData()
-    function getEntryData(): EntryType | undefined {
+    function getEntryData(): EntryType | LiveEntryType | undefined {
       // Grab the raw cell data
       let rawEntryData: RawEntryDataType = getEntryAtRow();
 
@@ -97,29 +98,44 @@ function getWeekData() {
         };
       }
 
-      //   If neither start or end cells are dates, return undefined.
-      if (
-        !(rawEntryData.startTime instanceof Date) ||
-        !(rawEntryData.endTime instanceof Date)
-      )
-        return;
+      // Check if startTime is a date
+      if (rawEntryData.startTime instanceof Date) {
+        let startHours;
+        let startMinutes;
+        let endHours;
+        let endMinutes;
+        let duration;
 
-      let startHours = rawEntryData.startTime.getHours() + 1;
-      if (startHours == 24) startHours = 0; // LITERALLY just for the zero time.
-      let startMinutes = rawEntryData.startTime.getMinutes();
+        startHours = rawEntryData.startTime.getHours() + 1;
+        if (startHours == 24) startHours = 0; // LITERALLY just for the zero time.
+        startMinutes = rawEntryData.startTime.getMinutes();
 
-      let endHours = rawEntryData.endTime.getHours() + 1;
-      let endMinutes = rawEntryData.endTime.getMinutes();
+        // Check if endTime is a date
+        if (rawEntryData.endTime instanceof Date) {
+          endHours = rawEntryData.endTime.getHours() + 1;
+          endMinutes = rawEntryData.endTime.getMinutes();
 
-      let duration = endHours - startHours + (endMinutes - startMinutes) / 60;
+          duration = endHours - startHours + (endMinutes - startMinutes) / 60;
+        } else if (rawEntryData.endTime == "") {
+          return {
+            day: dayData.day,
+            name: rawEntryData.name,
+            startTime: rawEntryData.startTime,
+            startTimeAsDecimal: startHours + startMinutes / 60,
+          };
+        }
 
-      debug("name: " + rawEntryData.name);
-      debug("duration: " + duration);
+        debug("name: " + rawEntryData.name);
+        debug("duration: " + duration);
 
-      return {
-        name: rawEntryData.name,
-        time: duration,
-      };
+        return {
+          name: rawEntryData.name,
+          time: duration,
+        };
+      }
+
+      // See if endTime is empty
+      // if (rawEntryData.endTime == "")
     }
 
     // ANCHOR addEntryToDaySummary()
@@ -147,13 +163,22 @@ function getWeekData() {
     while (thereIsANextEntry) {
       let preEntryCheck = getEntryData();
       if (preEntryCheck !== undefined) {
-        let entry: EntryType = preEntryCheck;
-        dayData.entries.push(entry);
-        addEntryToDaySummary(entry);
-        addEntryToWeekSummary(entry);
-        addEntryTimeToDayTotalHours(entry);
-        addEntryTimeToWeekTotalHours(entry);
+        function instanceOfEntryType(data: any): data is EntryType {
+          return "time" in data;
+        }
+        if (instanceOfEntryType(preEntryCheck)) {
+          let entry: EntryType = preEntryCheck;
+          dayData.entries.push(entry);
+          addEntryToDaySummary(entry);
+          addEntryToWeekSummary(entry);
+          addEntryTimeToDayTotalHours(entry);
+          addEntryTimeToWeekTotalHours(entry);
+        } else {
+          let liveEntry: LiveEntryType = preEntryCheck;
+          weekData.liveEntry = liveEntry;
+        }
       }
+
       if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
         thereIsANextEntry = false;
       currentRow++;
@@ -210,7 +235,8 @@ function writeWeekData(): void {
   function insertSummaryDataAtCurrentRow(
     i: number,
     entriesArray: EntryType[],
-    type: "week" | "day"
+    type: "week" | "day",
+    isLive: boolean
   ) {
     let percentageWeighedAgainst;
     if (type == "week" || (type == "day" && i == 0)) {
@@ -221,23 +247,72 @@ function writeWeekData(): void {
     sheet
       .getRange(currentRow, columns.summaryEntryName)
       .setValue(entriesArray[i].name);
-    sheet
-      .getRange(currentRow, columns.summaryEntryTime)
-      .setValue(entriesArray[i].time);
-    sheet
-      .getRange(currentRow, columns.summaryEntryPercentage)
-      .setValue(entriesArray[i].time / percentageWeighedAgainst);
+    if (!isLive) {
+      sheet
+        .getRange(currentRow, columns.summaryEntryTime)
+        .setValue(entriesArray[i].time);
+    } else {
+      console.log(weekData.liveEntry);
+      if (weekData.liveEntry !== undefined) {
+        let localDateString = new Date().toLocaleString("en-US", {
+          timeZone: "America/Boise",
+        });
+        let localDate = new Date(localDateString);
+        let currentHours =
+          entriesArray[i].time -
+          weekData.liveEntry.startTimeAsDecimal +
+          (localDate.getHours() + localDate.getMinutes() / 60);
+        console.log("SUCCESS");
+        console.log(`currentHours: ${currentHours}`);
+        console.log(`entriesArray[i].time: ${entriesArray[i].time}`);
+        console.log(
+          `weekData.liveEntry.startTimeAsDecimal: ${weekData.liveEntry.startTimeAsDecimal}`
+        );
+        console.log(
+          `new Date().getHours() + new Date().getMinutes() / 60: ${
+            new Date().getHours() + new Date().getMinutes() / 60
+          }`
+        );
+        sheet
+          .getRange(currentRow, columns.summaryEntryTime)
+          .setValue(currentHours);
+      }
+    }
+    // TODO USE SET FORMULA FOR THIS SHIT
+    if (!isLive) {
+      sheet
+        .getRange(currentRow, columns.summaryEntryPercentage)
+        .setNumberFormat("#.##%")
+        .setValue(entriesArray[i].time / percentageWeighedAgainst);
+    } else {
+      sheet
+        .getRange(currentRow, columns.summaryEntryPercentage)
+        .setValue("LIVE");
+    }
   }
 
   function writeWeekSummary() {
     for (let i = 0; i < sortedWeekSummaryEntries.length; i++) {
-      insertSummaryDataAtCurrentRow(i, sortedWeekSummaryEntries, "week");
+      let isLive: boolean = false;
+      if (
+        weekData.liveEntry !== undefined &&
+        sortedWeekSummaryEntries[i].name == weekData.liveEntry.name
+      )
+        isLive = true;
+
+      insertSummaryDataAtCurrentRow(
+        i,
+        sortedWeekSummaryEntries,
+        "week",
+        isLive
+      );
+
       currentRow++;
     }
     daySummaries.forEach((daySummary: EntryType[]) => {
       currentRow++;
       for (let i = 0; i < daySummary.length; i++) {
-        insertSummaryDataAtCurrentRow(i, daySummary, "day");
+        insertSummaryDataAtCurrentRow(i, daySummary, "day", false);
         currentRow++;
       }
     });
