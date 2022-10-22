@@ -11,6 +11,7 @@ export default interface DayDataType {
     | "Sunday";
   monthId?: number;
   dayOfMonthId?: number;
+  totalHours: number;
   summary: object;
   entries: EntryType[];
 }

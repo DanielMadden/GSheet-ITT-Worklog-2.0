@@ -71,6 +71,7 @@ function getWeekData() {
     currentRow = rows.entries;
 
     let dayData: DayDataType = {
+      totalHours: 0,
       day: sheet.getRange(rows.dayName, currentColumn).getValue(),
       summary: {},
       entries: [],
@@ -133,6 +134,11 @@ function getWeekData() {
       weekData.summary[entry.name] += entry.time;
     }
 
+    // ANCHOR addEntryTimeToDayTotalHours()
+    function addEntryTimeToDayTotalHours(entry: EntryType): void {
+      dayData.totalHours += entry.time;
+    }
+
     // ANCHOR addEntryTimeToWeekTotalHours()
     function addEntryTimeToWeekTotalHours(entry: EntryType): void {
       weekData.totalHours += entry.time;
@@ -145,6 +151,7 @@ function getWeekData() {
         dayData.entries.push(entry);
         addEntryToDaySummary(entry);
         addEntryToWeekSummary(entry);
+        addEntryTimeToDayTotalHours(entry);
         addEntryTimeToWeekTotalHours(entry);
       }
       if (!sheet.getRange(currentRow + 1, currentColumn).getValue())
@@ -177,29 +184,63 @@ function writeWeekData(): void {
 
   currentRow = rows.summary;
 
+  // Sort Week Summary
   let sortedWeekSummaryEntries: EntryType[] = convertEntrySummaryToSortedArray(
     weekData.summary
   );
-
-  // Add Total Hours
+  // Add Total Hours to Week Summary
   sortedWeekSummaryEntries.unshift({
     name: "Total Hours",
     time: weekData.totalHours,
   });
 
+  // Do the exact same thing, but for the individual days
+  let daySummaries: EntryType[][] = [];
+  weekData.daysDataArray.forEach((dayData: DayDataType) => {
+    let sortedDaySummaryEntries: EntryType[] = convertEntrySummaryToSortedArray(
+      dayData.summary
+    );
+    sortedDaySummaryEntries.unshift({
+      name: dayData.day,
+      time: dayData.totalHours,
+    });
+    daySummaries.push(sortedDaySummaryEntries);
+  });
+
+  function insertSummaryDataAtCurrentRow(
+    i: number,
+    entriesArray: EntryType[],
+    type: "week" | "day"
+  ) {
+    let percentageWeighedAgainst;
+    if (type == "week" || (type == "day" && i == 0)) {
+      percentageWeighedAgainst = weekData.totalHours;
+    } else if (type == "day") {
+      percentageWeighedAgainst = entriesArray[0].time;
+    }
+    sheet
+      .getRange(currentRow, columns.summaryEntryName)
+      .setValue(entriesArray[i].name);
+    sheet
+      .getRange(currentRow, columns.summaryEntryTime)
+      .setValue(entriesArray[i].time);
+    sheet
+      .getRange(currentRow, columns.summaryEntryPercentage)
+      .setValue(entriesArray[i].time / percentageWeighedAgainst);
+  }
+
   function writeWeekSummary() {
     for (let i = 0; i < sortedWeekSummaryEntries.length; i++) {
-      sheet
-        .getRange(currentRow, columns.summaryEntryName)
-        .setValue(sortedWeekSummaryEntries[i].name);
-      sheet
-        .getRange(currentRow, columns.summaryEntryTime)
-        .setValue(sortedWeekSummaryEntries[i].time);
-      sheet
-        .getRange(currentRow, columns.summaryEntryPercentage)
-        .setValue(sortedWeekSummaryEntries[i].time / weekData.totalHours);
+      insertSummaryDataAtCurrentRow(i, sortedWeekSummaryEntries, "week");
       currentRow++;
     }
+    daySummaries.forEach((daySummary: EntryType[]) => {
+      currentRow++;
+      for (let i = 0; i < daySummary.length; i++) {
+        insertSummaryDataAtCurrentRow(i, daySummary, "day");
+        currentRow++;
+      }
+    });
   }
 
   writeWeekSummary();
