@@ -346,15 +346,15 @@ function writeWeekData(): void {
 
       currentRow++;
     }
-    if (weekData.liveEntry !== undefined) {
-      if (
-        sortedWeekSummaryEntries.find(findLiveEntryNameInSummaryArray) ==
+    if (
+      weekData.liveEntry !== undefined &&
+      sortedWeekSummaryEntries.find(findLiveEntryNameInSummaryArray) ==
         undefined
-      ) {
-        insertLiveEntryAtCurrentRow();
-        currentRow++;
-      }
+    ) {
+      insertLiveEntryAtCurrentRow();
+      currentRow++;
     }
+
     daySummaries.forEach((daySummary: EntryType[]) => {
       currentRow++;
       let isLive: boolean = false;
@@ -371,12 +371,11 @@ function writeWeekData(): void {
       }
       if (
         weekData.liveEntry !== undefined &&
-        weekData.liveEntry.day == daySummary[0].name
+        weekData.liveEntry.day == daySummary[0].name &&
+        daySummary.find(findLiveEntryNameInSummaryArray) == undefined
       ) {
-        if (daySummary.find(findLiveEntryNameInSummaryArray) == undefined) {
-          insertLiveEntryAtCurrentRow();
-          currentRow++;
-        }
+        insertLiveEntryAtCurrentRow();
+        currentRow++;
       }
     });
   }
