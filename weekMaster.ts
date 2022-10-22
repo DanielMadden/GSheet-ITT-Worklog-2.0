@@ -243,5 +243,15 @@ function writeWeekData(): void {
     });
   }
 
+  function writeJSONAtBottom() {
+    sheet.getRange(99, columns.summaryEntryName).setValue("JSON");
+    sheet.getRange(99, columns.summaryEntryTime).setValue("⬇");
+    sheet.getRange(99, columns.summaryEntryPercentage).setValue("⬇");
+    sheet
+      .getRange(100, columns.summaryEntryName)
+      .setValue(JSON.stringify(weekData));
+  }
+
   writeWeekSummary();
+  writeJSONAtBottom();
 }
