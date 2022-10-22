@@ -245,10 +245,12 @@ function writeWeekData(): void {
       .getRange(currentRow, columns.summaryEntryName)
       .setValue(entriesArray[i].name);
     if (!isLive) {
-      sheet
-        .getRange(currentRow, columns.summaryEntryTime)
-        .setNumberFormat("#0.##")
-        .setValue(entriesArray[i].time);
+      if (entriesArray[i].time !== 0) {
+        sheet
+          .getRange(currentRow, columns.summaryEntryTime)
+          .setNumberFormat("#0.##")
+          .setValue(entriesArray[i].time);
+      }
     } else {
       console.log(weekData.liveEntry);
       if (weekData.liveEntry !== undefined) {
@@ -266,10 +268,12 @@ function writeWeekData(): void {
       }
     }
     if (!isLive) {
-      sheet
-        .getRange(currentRow, columns.summaryEntryPercentage)
-        .setNumberFormat("#.##%")
-        .setValue(entriesArray[i].time / percentageWeighedAgainst);
+      if (percentageWeighedAgainst !== 0) {
+        sheet
+          .getRange(currentRow, columns.summaryEntryPercentage)
+          .setNumberFormat("#.##%")
+          .setValue(entriesArray[i].time / percentageWeighedAgainst);
+      }
     } else {
       sheet
         .getRange(currentRow, columns.summaryEntryPercentage)
