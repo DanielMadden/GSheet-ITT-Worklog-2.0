@@ -292,7 +292,6 @@ function writeWeekData(): void {
           );
       }
     }
-    // TODO USE SET FORMULA FOR THIS SHIT
     if (!isLive) {
       sheet
         .getRange(currentRow, columns.summaryEntryPercentage)
@@ -303,6 +302,29 @@ function writeWeekData(): void {
         .getRange(currentRow, columns.summaryEntryPercentage)
         .setValue("LIVE");
     }
+  }
+
+  function insertLiveEntryAtCurrentRow() {
+    let startTimeInMinutes = "";
+    if (weekData.liveEntry !== undefined) {
+      startTimeInMinutes = decimalToHHMM(weekData.liveEntry.startTimeAsDecimal);
+      sheet
+        .getRange(currentRow, columns.summaryEntryName)
+        .setValue(weekData.liveEntry.name);
+      sheet
+        .getRange(currentRow, columns.summaryEntryTime)
+        .setNumberFormat("HH:mm")
+        .setFormula(
+          `=MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}"))`
+        );
+      sheet
+        .getRange(currentRow, columns.summaryEntryPercentage)
+        .setValue("LIVE");
+    }
+  }
+
+  function findLiveEntryNameInSummaryArray(entry: EntryType) {
+    return entry.name == weekData.liveEntry?.name;
   }
 
   function writeWeekSummary() {
@@ -324,6 +346,15 @@ function writeWeekData(): void {
 
       currentRow++;
     }
+    if (weekData.liveEntry !== undefined) {
+      if (
+        sortedWeekSummaryEntries.find(findLiveEntryNameInSummaryArray) ==
+        undefined
+      ) {
+        insertLiveEntryAtCurrentRow();
+        currentRow++;
+      }
+    }
     daySummaries.forEach((daySummary: EntryType[]) => {
       currentRow++;
       let isLive: boolean = false;
@@ -337,6 +368,15 @@ function writeWeekData(): void {
         }
         insertSummaryDataAtCurrentRow(i, daySummary, "day", isLive);
         currentRow++;
+      }
+      if (
+        weekData.liveEntry !== undefined &&
+        weekData.liveEntry.day == daySummary[0].name
+      ) {
+        if (daySummary.find(findLiveEntryNameInSummaryArray) == undefined) {
+          insertLiveEntryAtCurrentRow();
+          currentRow++;
+        }
       }
     });
   }
