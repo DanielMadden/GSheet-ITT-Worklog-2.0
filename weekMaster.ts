@@ -181,6 +181,12 @@ function writeWeekData(): void {
     weekData.summary
   );
 
+  // Add Total Hours
+  sortedWeekSummaryEntries.unshift({
+    name: "Total Hours",
+    time: weekData.totalHours,
+  });
+
   function writeWeekSummary() {
     for (let i = 0; i < sortedWeekSummaryEntries.length; i++) {
       sheet
