@@ -311,8 +311,9 @@ function writeWeekData(): void {
       if (
         weekData.liveEntry !== undefined &&
         sortedWeekSummaryEntries[i].name == weekData.liveEntry.name
-      )
+      ) {
         isLive = true;
+      }
 
       insertSummaryDataAtCurrentRow(
         i,
@@ -325,8 +326,16 @@ function writeWeekData(): void {
     }
     daySummaries.forEach((daySummary: EntryType[]) => {
       currentRow++;
+      let isLive: boolean = false;
       for (let i = 0; i < daySummary.length; i++) {
-        insertSummaryDataAtCurrentRow(i, daySummary, "day", false);
+        if (
+          weekData.liveEntry !== undefined &&
+          weekData.liveEntry.day == daySummary[0].name &&
+          weekData.liveEntry.name == daySummary[i].name
+        ) {
+          isLive = true;
+        }
+        insertSummaryDataAtCurrentRow(i, daySummary, "day", isLive);
         currentRow++;
       }
     });
