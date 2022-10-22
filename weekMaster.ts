@@ -250,32 +250,46 @@ function writeWeekData(): void {
     if (!isLive) {
       sheet
         .getRange(currentRow, columns.summaryEntryTime)
+        .setNumberFormat("#0.##")
         .setValue(entriesArray[i].time);
     } else {
       console.log(weekData.liveEntry);
       if (weekData.liveEntry !== undefined) {
-        let localDateString = new Date().toLocaleString("en-US", {
-          timeZone: "America/Boise",
-        });
-        let localDate = new Date(localDateString);
-        let currentHours =
-          entriesArray[i].time -
-          weekData.liveEntry.startTimeAsDecimal +
-          (localDate.getHours() + localDate.getMinutes() / 60);
-        console.log("SUCCESS");
-        console.log(`currentHours: ${currentHours}`);
-        console.log(`entriesArray[i].time: ${entriesArray[i].time}`);
-        console.log(
-          `weekData.liveEntry.startTimeAsDecimal: ${weekData.liveEntry.startTimeAsDecimal}`
+        // let localDateString = new Date().toLocaleString("en-US", {
+        //   timeZone: "America/Boise",
+        // });
+        // let localDate = new Date(localDateString);
+        // let currentHours =
+        //   entriesArray[i].time -
+        //   weekData.liveEntry.startTimeAsDecimal +
+        //   (localDate.getHours() + localDate.getMinutes() / 60);
+        // console.log("SUCCESS");
+        // console.log(`currentHours: ${currentHours}`);
+        // console.log(`entriesArray[i].time: ${entriesArray[i].time}`);
+        // console.log(
+        //   `weekData.liveEntry.startTimeAsDecimal: ${weekData.liveEntry.startTimeAsDecimal}`
+        // );
+        // console.log(
+        //   `new Date().getHours() + new Date().getMinutes() / 60: ${
+        //     new Date().getHours() + new Date().getMinutes() / 60
+        //   }`
+        // );
+
+        // let timeObject = decimalToHoursAndMinutesObject(entriesArray[i].time);
+        // let time = new Date();
+        // time.setHours(timeObject.hours, timeObject.minutes);
+
+        let previousDurationInMinutes = decimalToHHMM(entriesArray[i].time);
+        let startTimeInMinutes = decimalToHHMM(
+          weekData.liveEntry.startTimeAsDecimal
         );
-        console.log(
-          `new Date().getHours() + new Date().getMinutes() / 60: ${
-            new Date().getHours() + new Date().getMinutes() / 60
-          }`
-        );
+
         sheet
           .getRange(currentRow, columns.summaryEntryTime)
-          .setValue(currentHours);
+          .setNumberFormat("HH:mm")
+          .setFormula(
+            `=SUM(MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}")),TIMEVALUE("${previousDurationInMinutes}"))`
+          );
       }
     }
     // TODO USE SET FORMULA FOR THIS SHIT
