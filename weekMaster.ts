@@ -335,16 +335,22 @@ function writeWeekData(): void {
     daySummaries.forEach((daySummary: EntryType[]) => {
       currentRow++;
       let isLive: boolean = false;
-      for (let i = 0; i < daySummary.length; i++) {
-        if (
-          weekData.liveEntry !== undefined &&
-          weekData.liveEntry.day == daySummary[0].name &&
-          weekData.liveEntry.name == daySummary[i].name
-        ) {
-          isLive = true;
+      if (
+        daySummary.length > 1 ||
+        (weekData.liveEntry !== undefined &&
+          weekData.liveEntry.day == daySummary[0].name)
+      ) {
+        for (let i = 0; i < daySummary.length; i++) {
+          if (
+            weekData.liveEntry !== undefined &&
+            weekData.liveEntry.day == daySummary[0].name &&
+            weekData.liveEntry.name == daySummary[i].name
+          ) {
+            isLive = true;
+          }
+          insertSummaryDataAtCurrentRow(i, daySummary, "day", isLive);
+          currentRow++;
         }
-        insertSummaryDataAtCurrentRow(i, daySummary, "day", isLive);
-        currentRow++;
       }
       if (
         weekData.liveEntry !== undefined &&
