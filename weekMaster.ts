@@ -349,6 +349,7 @@ function writeWeekData(): void {
             isLive = true;
           }
           insertSummaryDataAtCurrentRow(i, daySummary, "day", isLive);
+          isLive = false;
           currentRow++;
         }
       }
