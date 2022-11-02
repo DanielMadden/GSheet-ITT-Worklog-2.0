@@ -266,9 +266,10 @@ function writeWeekData(): void {
 
         sheet
           .getRange(currentRow, columns.summaryEntryTime)
-          .setNumberFormat("HH:mm")
+          // .setNumberFormat("HH:mm")
+          .setNumberFormat("#0.##")
           .setFormula(
-            `=SUM(MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}")),TIMEVALUE("${previousDurationInMinutes}"))`
+            `=MULTIPLY(SUM(MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}")),TIMEVALUE("${previousDurationInMinutes}"))),24)`
           );
       }
     }
@@ -295,9 +296,10 @@ function writeWeekData(): void {
         .setValue(weekData.liveEntry.name);
       sheet
         .getRange(currentRow, columns.summaryEntryTime)
-        .setNumberFormat("HH:mm")
+        // .setNumberFormat("HH:mm")
+        .setNumberFormat("#0.##")
         .setFormula(
-          `=MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}"))`
+          `=MULTIPLY(MINUS(TIMEVALUE(NOW()),TIMEVALUE("${startTimeInMinutes}")),24)`
         );
       sheet
         .getRange(currentRow, columns.summaryEntryPercentage)
