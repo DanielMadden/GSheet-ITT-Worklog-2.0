@@ -110,10 +110,15 @@ function getWeekData() {
         if (startHours == 24) startHours = 0; // LITERALLY just for the zero time.
         startMinutes = rawEntryData.startTime.getMinutes();
 
+        // console.log(`startHours: ${startHours}`);
+
         // Check if endTime is a date
         if (rawEntryData.endTime instanceof Date) {
           endHours = rawEntryData.endTime.getHours() + 1;
+          if (endHours == 24) endHours = 0; // LITERALLY just for the zero time.
           endMinutes = rawEntryData.endTime.getMinutes();
+
+          // console.log(`endHours: ${endHours}`);
 
           duration = endHours - startHours + (endMinutes - startMinutes) / 60;
         } else if (rawEntryData.endTime == "") {
